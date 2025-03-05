@@ -24,16 +24,7 @@ def format_rct_dataset_python(dataset, outcome_field, treatment_field, interacti
             if col_name not in [outcome_field, treatment_field]: # Interact treatment with all other columns
                 data[f'{treatment_field}_x_{col_name}'] = treatment_column * data[col_name] # Simple interaction (can be adjusted)
 
-    # 3. Handle categorical variables (basic dummy variable creation - can be refined)
-    #    This is a basic example; you might need more sophisticated handling based on your data
-    for col_name in data.select_dtypes(include='category').columns: # or 'object' for string type columns that might be categorical
-        if col_name not in [outcome_field, treatment_field]: # Don't dummy encode outcome or treatment (usually)
-            dummies = pd.get_dummies(data[col_name], prefix=col_name, drop_first=True) # drop_first to avoid multicollinearity in some models
-            data = pd.concat([data, dummies], axis=1) # Add dummy columns
-            data = data.drop(col_name, axis=1) # Remove original categorical column
-
-    return data
-
+    
 class VTObject:
     """
     Basic Virtual Twin Object.
